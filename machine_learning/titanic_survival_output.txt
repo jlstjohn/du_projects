@@ -1,0 +1,250 @@
+Getting dataset
+Cleaning/Preprocessing Data
+Creating Training and Test Sets
+Begin model training
+
+
+*** Logistic Regression ***
+
+Confusion Matrix:
+[[379  60]
+ [ 81 191]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.82      0.86      0.84       439
+           1       0.76      0.70      0.73       272
+
+    accuracy                           0.80       711
+   macro avg       0.79      0.78      0.79       711
+weighted avg       0.80      0.80      0.80       711
+
+
+ROC-AUC Score:
+0.8424770534637545
+
+
+
+
+*** SGD Classifier ***
+
+Confusion Matrix:
+[[253 186]
+ [ 93 179]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.73      0.58      0.64       439
+           1       0.49      0.66      0.56       272
+
+    accuracy                           0.61       711
+   macro avg       0.61      0.62      0.60       711
+weighted avg       0.64      0.61      0.61       711
+
+
+ROC-AUC Score:
+0.6436629036580463
+
+
+
+
+*** Support Vector Classifier ***
+
+Confusion Matrix:
+[[383  56]
+ [ 81 191]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.83      0.87      0.85       439
+           1       0.77      0.70      0.74       272
+
+    accuracy                           0.81       711
+   macro avg       0.80      0.79      0.79       711
+weighted avg       0.81      0.81      0.81       711
+
+
+ROC-AUC Score:
+0.826824835856894
+
+
+
+
+Performing a grid search on SVM classifier
+Fitting 5 folds for each of 30 candidates, totalling 150 fits
+[CV 1/5] END svm_clf__C=1, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.838 total time=   0.0s
+[CV 2/5] END svm_clf__C=1, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.820 total time=   0.0s
+[CV 3/5] END svm_clf__C=1, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.831 total time=   0.0s
+[CV 4/5] END svm_clf__C=1, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.867 total time=   0.0s
+[CV 5/5] END svm_clf__C=1, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.833 total time=   0.0s
+[CV 1/5] END svm_clf__C=1, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.842 total time=   0.0s
+[CV 2/5] END svm_clf__C=1, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.823 total time=   0.0s
+[CV 3/5] END svm_clf__C=1, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.833 total time=   0.0s
+[CV 4/5] END svm_clf__C=1, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.867 total time=   0.0s
+[CV 5/5] END svm_clf__C=1, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.843 total time=   0.0s
+[CV 1/5] END svm_clf__C=1, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.849 total time=   0.0s
+[CV 2/5] END svm_clf__C=1, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.829 total time=   0.0s
+[CV 3/5] END svm_clf__C=1, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.807 total time=   0.0s
+[CV 4/5] END svm_clf__C=1, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.849 total time=   0.0s
+[CV 5/5] END svm_clf__C=1, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.839 total time=   0.0s
+[CV 1/5] END svm_clf__C=1, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.861 total time=   0.0s
+[CV 2/5] END svm_clf__C=1, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 3/5] END svm_clf__C=1, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.812 total time=   0.0s
+[CV 4/5] END svm_clf__C=1, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.815 total time=   0.0s
+[CV 5/5] END svm_clf__C=1, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.845 total time=   0.0s
+[CV 1/5] END svm_clf__C=1, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.808 total time=   0.0s
+[CV 2/5] END svm_clf__C=1, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.764 total time=   0.0s
+[CV 3/5] END svm_clf__C=1, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 4/5] END svm_clf__C=1, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.793 total time=   0.0s
+[CV 5/5] END svm_clf__C=1, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 1/5] END svm_clf__C=10, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.843 total time=   0.0s
+[CV 2/5] END svm_clf__C=10, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.819 total time=   0.0s
+[CV 3/5] END svm_clf__C=10, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.830 total time=   0.0s
+[CV 4/5] END svm_clf__C=10, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.867 total time=   0.0s
+[CV 5/5] END svm_clf__C=10, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.838 total time=   0.0s
+[CV 1/5] END svm_clf__C=10, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.865 total time=   0.0s
+[CV 2/5] END svm_clf__C=10, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.817 total time=   0.0s
+[CV 3/5] END svm_clf__C=10, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.824 total time=   0.0s
+[CV 4/5] END svm_clf__C=10, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.846 total time=   0.0s
+[CV 5/5] END svm_clf__C=10, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.845 total time=   0.0s
+[CV 1/5] END svm_clf__C=10, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.861 total time=   0.0s
+[CV 2/5] END svm_clf__C=10, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.836 total time=   0.0s
+[CV 3/5] END svm_clf__C=10, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.838 total time=   0.0s
+[CV 4/5] END svm_clf__C=10, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.827 total time=   0.0s
+[CV 5/5] END svm_clf__C=10, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.812 total time=   0.0s
+[CV 1/5] END svm_clf__C=10, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.839 total time=   0.0s
+[CV 2/5] END svm_clf__C=10, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.741 total time=   0.0s
+[CV 3/5] END svm_clf__C=10, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.779 total time=   0.0s
+[CV 4/5] END svm_clf__C=10, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.771 total time=   0.0s
+[CV 5/5] END svm_clf__C=10, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.805 total time=   0.0s
+[CV 1/5] END svm_clf__C=10, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.717 total time=   0.0s
+[CV 2/5] END svm_clf__C=10, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.752 total time=   0.0s
+[CV 3/5] END svm_clf__C=10, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 4/5] END svm_clf__C=10, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.749 total time=   0.0s
+[CV 5/5] END svm_clf__C=10, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.815 total time=   0.0s
+[CV 1/5] END svm_clf__C=50, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.850 total time=   0.0s
+[CV 2/5] END svm_clf__C=50, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.820 total time=   0.0s
+[CV 3/5] END svm_clf__C=50, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.850 total time=   0.0s
+[CV 4/5] END svm_clf__C=50, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.854 total time=   0.0s
+[CV 5/5] END svm_clf__C=50, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.853 total time=   0.0s
+[CV 1/5] END svm_clf__C=50, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.851 total time=   0.0s
+[CV 2/5] END svm_clf__C=50, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.845 total time=   0.0s
+[CV 3/5] END svm_clf__C=50, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.810 total time=   0.0s
+[CV 4/5] END svm_clf__C=50, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.840 total time=   0.0s
+[CV 5/5] END svm_clf__C=50, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.844 total time=   0.0s
+[CV 1/5] END svm_clf__C=50, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.871 total time=   0.0s
+[CV 2/5] END svm_clf__C=50, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.834 total time=   0.0s
+[CV 3/5] END svm_clf__C=50, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.832 total time=   0.0s
+[CV 4/5] END svm_clf__C=50, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.824 total time=   0.0s
+[CV 5/5] END svm_clf__C=50, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.823 total time=   0.0s
+[CV 1/5] END svm_clf__C=50, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.794 total time=   0.0s
+[CV 2/5] END svm_clf__C=50, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.721 total time=   0.0s
+[CV 3/5] END svm_clf__C=50, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.796 total time=   0.0s
+[CV 4/5] END svm_clf__C=50, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.723 total time=   0.0s
+[CV 5/5] END svm_clf__C=50, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.822 total time=   0.0s
+[CV 1/5] END svm_clf__C=50, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.718 total time=   0.0s
+[CV 2/5] END svm_clf__C=50, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.727 total time=   0.0s
+[CV 3/5] END svm_clf__C=50, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.802 total time=   0.0s
+[CV 4/5] END svm_clf__C=50, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.760 total time=   0.0s
+[CV 5/5] END svm_clf__C=50, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.784 total time=   0.0s
+[CV 1/5] END svm_clf__C=100, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.862 total time=   0.0s
+[CV 2/5] END svm_clf__C=100, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.812 total time=   0.0s
+[CV 3/5] END svm_clf__C=100, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.814 total time=   0.0s
+[CV 4/5] END svm_clf__C=100, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.853 total time=   0.0s
+[CV 5/5] END svm_clf__C=100, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.857 total time=   0.0s
+[CV 1/5] END svm_clf__C=100, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.851 total time=   0.0s
+[CV 2/5] END svm_clf__C=100, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.843 total time=   0.0s
+[CV 3/5] END svm_clf__C=100, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.820 total time=   0.0s
+[CV 4/5] END svm_clf__C=100, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.837 total time=   0.0s
+[CV 5/5] END svm_clf__C=100, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.824 total time=   0.0s
+[CV 1/5] END svm_clf__C=100, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.870 total time=   0.0s
+[CV 2/5] END svm_clf__C=100, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.813 total time=   0.0s
+[CV 3/5] END svm_clf__C=100, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.825 total time=   0.0s
+[CV 4/5] END svm_clf__C=100, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.814 total time=   0.0s
+[CV 5/5] END svm_clf__C=100, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.790 total time=   0.0s
+[CV 1/5] END svm_clf__C=100, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.758 total time=   0.0s
+[CV 2/5] END svm_clf__C=100, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.724 total time=   0.0s
+[CV 3/5] END svm_clf__C=100, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.781 total time=   0.0s
+[CV 4/5] END svm_clf__C=100, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.721 total time=   0.0s
+[CV 5/5] END svm_clf__C=100, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.836 total time=   0.0s
+[CV 1/5] END svm_clf__C=100, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.718 total time=   0.0s
+[CV 2/5] END svm_clf__C=100, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.704 total time=   0.0s
+[CV 3/5] END svm_clf__C=100, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.784 total time=   0.0s
+[CV 4/5] END svm_clf__C=100, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.743 total time=   0.0s
+[CV 5/5] END svm_clf__C=100, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.784 total time=   0.0s
+[CV 1/5] END svm_clf__C=200, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.863 total time=   0.0s
+[CV 2/5] END svm_clf__C=200, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.822 total time=   0.0s
+[CV 3/5] END svm_clf__C=200, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.812 total time=   0.0s
+[CV 4/5] END svm_clf__C=200, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.831 total time=   0.0s
+[CV 5/5] END svm_clf__C=200, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.853 total time=   0.0s
+[CV 1/5] END svm_clf__C=200, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.854 total time=   0.0s
+[CV 2/5] END svm_clf__C=200, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.838 total time=   0.0s
+[CV 3/5] END svm_clf__C=200, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.825 total time=   0.0s
+[CV 4/5] END svm_clf__C=200, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.833 total time=   0.0s
+[CV 5/5] END svm_clf__C=200, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.810 total time=   0.0s
+[CV 1/5] END svm_clf__C=200, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.864 total time=   0.0s
+[CV 2/5] END svm_clf__C=200, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.803 total time=   0.0s
+[CV 3/5] END svm_clf__C=200, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.813 total time=   0.0s
+[CV 4/5] END svm_clf__C=200, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.772 total time=   0.0s
+[CV 5/5] END svm_clf__C=200, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.767 total time=   0.0s
+[CV 1/5] END svm_clf__C=200, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.752 total time=   0.0s
+[CV 2/5] END svm_clf__C=200, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.726 total time=   0.0s
+[CV 3/5] END svm_clf__C=200, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.748 total time=   0.0s
+[CV 4/5] END svm_clf__C=200, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.715 total time=   0.0s
+[CV 5/5] END svm_clf__C=200, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.847 total time=   0.0s
+[CV 1/5] END svm_clf__C=200, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.722 total time=   0.0s
+[CV 2/5] END svm_clf__C=200, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.698 total time=   0.0s
+[CV 3/5] END svm_clf__C=200, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.783 total time=   0.0s
+[CV 4/5] END svm_clf__C=200, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.739 total time=   0.0s
+[CV 5/5] END svm_clf__C=200, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.796 total time=   0.0s
+[CV 1/5] END svm_clf__C=300, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.855 total time=   0.0s
+[CV 2/5] END svm_clf__C=300, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.833 total time=   0.0s
+[CV 3/5] END svm_clf__C=300, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 4/5] END svm_clf__C=300, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.835 total time=   0.0s
+[CV 5/5] END svm_clf__C=300, svm_clf__gamma=0.0001, svm_clf__kernel=rbf;, score=0.850 total time=   0.0s
+[CV 1/5] END svm_clf__C=300, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.857 total time=   0.0s
+[CV 2/5] END svm_clf__C=300, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.833 total time=   0.0s
+[CV 3/5] END svm_clf__C=300, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.834 total time=   0.0s
+[CV 4/5] END svm_clf__C=300, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.825 total time=   0.0s
+[CV 5/5] END svm_clf__C=300, svm_clf__gamma=0.001, svm_clf__kernel=rbf;, score=0.806 total time=   0.0s
+[CV 1/5] END svm_clf__C=300, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.863 total time=   0.0s
+[CV 2/5] END svm_clf__C=300, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.784 total time=   0.0s
+[CV 3/5] END svm_clf__C=300, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.783 total time=   0.0s
+[CV 4/5] END svm_clf__C=300, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.770 total time=   0.0s
+[CV 5/5] END svm_clf__C=300, svm_clf__gamma=0.01, svm_clf__kernel=rbf;, score=0.767 total time=   0.0s
+[CV 1/5] END svm_clf__C=300, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.762 total time=   0.1s
+[CV 2/5] END svm_clf__C=300, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.729 total time=   0.0s
+[CV 3/5] END svm_clf__C=300, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.753 total time=   0.0s
+[CV 4/5] END svm_clf__C=300, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.710 total time=   0.0s
+[CV 5/5] END svm_clf__C=300, svm_clf__gamma=0.1, svm_clf__kernel=rbf;, score=0.860 total time=   0.0s
+[CV 1/5] END svm_clf__C=300, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.722 total time=   0.0s
+[CV 2/5] END svm_clf__C=300, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.692 total time=   0.0s
+[CV 3/5] END svm_clf__C=300, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.777 total time=   0.0s
+[CV 4/5] END svm_clf__C=300, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.741 total time=   0.0s
+[CV 5/5] END svm_clf__C=300, svm_clf__gamma=1, svm_clf__kernel=rbf;, score=0.803 total time=   0.0s
+Best estimator: Pipeline(steps=[('scaler', StandardScaler()),
+                ('svm_clf', SVC(C=50, gamma=0.0001, probability=True))])     
+Best parameters: {'svm_clf__C': 50, 'svm_clf__gamma': 0.0001, 'svm_clf__kernel': 'rbf'}
+Best ROC-AUC score: 0.8455217535860168
+*** Best Support Vector Classifier w/Test Data ***
+
+Confusion Matrix:
+[[97 13]
+ [26 42]]
+
+Classification Report:
+              precision    recall  f1-score   support
+
+           0       0.79      0.88      0.83       110
+           1       0.76      0.62      0.68        68
+
+    accuracy                           0.78       178
+   macro avg       0.78      0.75      0.76       178
+weighted avg       0.78      0.78      0.78       178
+
+
+ROC-AUC Score:
+0.8433155080213904
