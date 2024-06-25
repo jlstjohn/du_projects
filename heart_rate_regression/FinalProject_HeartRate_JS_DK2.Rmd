@@ -1,0 +1,553 @@
+---
+title: "Nonlinear Regression"
+author: "Dina Koes, Kellie Halladay, Jesse St. John"
+date: "2023-10-28"
+output:
+  word_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Load appropriate library packages to run and view nonlinear regression code.
+
+```{r}
+
+library(nls.multstart)
+library(minpack.lm)
+library(dplyr)
+library(ggplot2)
+library(mgcv)
+library(flexmix)
+library(caret)
+library(npreg)
+
+```
+
+## Introduction for Running and Heart Rate Data
+
+The following "heart_laps" data was obtained from https://www.kaggle.com/datasets/mcandocia/running-heart-rate-recovery/data. The author, Max Candocia, collected GPS, heart rate, and temperature for approximately two years. The data corresponds to the stopwatch stop & start events. The author collected a wide range of information (variables) to describe the overall run, as well as at the stop and start of the run.
+
+Load and view the "s1_laps_summary.csv" data file to get an initial look at the data collected.
+
+```{r pressure, echo=FALSE}
+
+data <- read.csv("s1_laps_summary.csv")
+
+data
+
+```
+
+View variables in the data set structure.
+
+```{r}
+
+str(data)
+
+```
+
+## Variable Selection:
+
+There are potentially 214 variables to look at in this data set. For simplicity, we decided to only focus on two of the variables. We are going to use heart_rate as the response variable and time_elapsed as the predictor variable. Time_elapsed is measured in minutes, while heart_rate is measured in beats per minute.
+
+Before creating our models, we are going to remove any missing values and then create a smaller data frame with only the variables of interest.
+
+```{r}
+#Create new data_frame without NA values for heart_rate and time_elapsed variables
+data_filter <- filter(data, !is.na(data$heart_rate) & !is.na(data$time_elapsed))
+
+#Create another new data frame from data_filter with just the two variables in question
+data_small <- data_filter[c("heart_rate","time_elapsed")]
+
+#Check that there are no NA values in new data_small data frame
+num_na <- sum(is.na(data_small))
+```
+
+## Fitting the Models
+
+Before fitting the nonlinear regression model, we will show what the linear regression model looks like for our data. 
+
+# Model 1.1 : Linear Model
+
+A linear model represents the relationship between the dependent variable and one or more independent variables. The equation, y = a+b*x is used to express the linear model in an equation, where y is the response variable, x is the predictor variable, a is the intercept, and b is the slope. 
+
+To determine linearity, run the following code chunk to view statistics.
+
+```{r}
+
+linear_model.1 <- lm(heart_rate ~ time_elapsed, data = data_small)
+
+summary(linear_model.1)
+
+```
+The coefficients section of the summary output shows the estimated values of the model parameters, along with their standard errors, t-values, and p-values. The p-value for the time_elapsed parameter is 0.0332, which is less than the significance level of 0.05. This means that the relationship between heart rate and time elapsed is statistically significant.
+
+The fact that the model is linear does not mean that the relationship between heart rate and time elapsed is linear. The model is linear in the parameter, but the variable itself is not linear. In other words, the model is assuming that the heart rate changes linearly with time elapsed. However, the actual relationship between heart rate and time elapsed is nonlinear.
+
+# Model 1.1 : Linear Plot
+
+```{r}
+
+ggplot(data_small, aes(x = time_elapsed, y = heart_rate)) +
+  geom_point(color = "blue") +
+  labs(x = "Time Elapsed", y = "Heart Rate") +
+  ggtitle("Scatter Plot of Time Elapsed vs. Heart Rate")
+
+
+```
+The plot shows the relationship between the variables "Time Elapsed" and "Heart Rate" in the data set. Each point in the plot represents a specific observation, with the x-axis representing the time elapsed and the y-axis representing the heart rate. The supine triangle points appear to follow a specific pattern or form, it suggests that there might be a linear or nonlinear relationship between these variables.
+
+# Checking Assumptions
+
+We can examine the below plots to ensure that all data requirements are met in order to continue on with the process of creating nonlinear models.
+
+```{r}
+plot(linear_model.1)
+```
+
+In the Q-Q plot, the points tend to lie along the dotted line, so the data is approximately normally distributed. Also, in the scale-location plot, we do not see any significant shapes forming. In the Residuals vs Leverage plot, we do not see any influential points. So it appears that we are set to continue on to nonlinear model fitting.
+
+# Model 1.2 : Exponential Regression Model
+
+Exponential regression is a type of nonlinear regression that models the relationship between the response variable and the predictor variable using an exponential function. An exponential regression model explains the growth or decay of processes by doubling the rate, and is best fit to the data set. The equation, $y = ab^x$ is used to express exponential regression in an equation; where y is the dependent variable, x is the independent variable, a is a scale factor, and b is the rate of growth or decay.
+
+The exponential function in the model means that the heart rate is expected to decrease exponentially with time elapsed. The relationship can be modeled utilizing the following: heart_rate ~ a * exp(b * time_elapsed), where heart_rate is the dependent variable, and time_elapsed is the independent variable. 
+
+It is common when fitting nonlinear models, that the initial parameter estimations for the model equations are provided by the users as can be seen below.
+
+```{r}
+
+expo.model <- nls(heart_rate ~ a * exp(b * time_elapsed), 
+             data = data_small, 
+             start = list(a = 150, b = -0.001))
+
+summary(expo.model)
+
+```
+The 'a' or amplitude, indicates the baseline heart rate or the heart rate at the beginning of the time elapsed, and is highly significant with a p-value of <2e-16. This suggests significant variation in heart rate and that the exponential function is not zero. The 'b' or rate of change, indicates how the heart rate changes as time elapses. The p-value of 0.0318 suggests that the rate of change is different from zero, although it isn't as significant as the amplitude. The residual standard error (RSE) of 16.5, represents the standard deviation of the residuals, and measures the model's lack of fit to the data. The RSE is an acceptable value given that typical heart rate ranges between 60bpm and 200bpm, suggesting that the model's predictions are closer to the actual observed values, and a better goodness of fit. The model converges after 5 iterations, with a convergence tolerance of 8.571e-07, suggesting that the model successfully found parameter estimates that minimized the sum of the squared residuals.
+
+# Model 1.2 : Exponential Regression Model Plot
+
+To obtain a visual representation of Model 1.2 nonlinear regression with variables heart_rate and time_elapsed, load and run the following chunk:
+
+```{r}
+expo.model <- nls(heart_rate ~ a * exp(b * time_elapsed), data = data_small, start = list(a = 150, b = -0.001))
+
+ggplot(data_small, aes(x = time_elapsed, y = heart_rate)) +
+  geom_point() +
+  geom_smooth(method = "nls", formula = y ~ a * exp(b * x),
+              method.args = list(start = c(a = 150, b = -0.0001)), se = FALSE) +
+  labs(x = "Time Elapsed", y = "Heart Rate") +
+  ggtitle("Exponential Nonlinear Regression Plot") +
+  theme_minimal()
+
+```
+
+The scatterplot (x = time elapsed, y = heart rate) identifies a nonlinear regressive pattern; more congestion is observed on the left side of the plot, and decreases as time elapsed increases. Nonlinear regression identifies an increase in one variable does not result in a proportional increase or decrease in the other variable, as viewed above. 
+
+# Goodness of Fit Test: Exponential Regression Model
+
+Compute the AIC and BIC values for exponential regression model to determine the goodness of fit.
+
+```{r}
+
+expo.bic <- BIC(expo.model)
+expo.bic
+expo.aic <- AIC(expo.model)
+expo.aic
+
+```
+
+AIC value (46804.94) is slightly lower than the BIC value (46824.8), which suggests that the AIC is a better value. However, the difference between the two values is very small, so it is difficult to say definitively which is better. We will come back to these values later to compare all models.
+
+# Model 1.3 : Exponential Spline Regression Model
+
+Exponential spline regression is a form of nonlinear regression that merges the adaptability of spline functions with an exponential structure. Spline regression entails fitting piecewise polynomial functions to the data, allowing for more complex and adaptable connections between the independent and dependent variables. When paired with an exponential model, it allows the modeling of nonlinear relationships displaying exponential growth or decay. 
+
+A spline regression is chosen to better demonstrate nonlinearity between the variables, heart rate and time elapsed. The family "Gaussian" is chosen under the assumption that the data is normally distributed. Run the following code chunk to obtain the statistical summary.
+
+```{r}
+
+expo.spline <- gam(heart_rate ~ s(time_elapsed), data = data_small, method = "REML")
+
+summary(expo.spline)
+
+```
+
+The estimated degrees of freedom (edf), reference degrees of freedom, F-statistic, and p-value (<2e-16) for the smooth term. The p-value is less than 0.05, which indicates that the smooth term is statistically significant and that the relationship between heart rate and time elapsed is nonlinear. The REML value of 23385 indicates that the model is a good fit for the data. This is because the REML value is relatively low, which indicates that the model is not over fitting the data. The deviance explained is 1.06%, indicating that the model captures only a small portion of the variability in the data. Overall, the model suggests that there is a nonlinear relationship between heart rate and time elapsed.
+
+
+# Model 1.3 : Exponential Spline Regression Plot
+
+```{r}
+
+plot(expo.spline, se = TRUE, col = "blue")
+
+```
+
+The nonlinearity of the model is evident in the smooth term for time elapsed. The plot of the smooth term shows that the relationship between heart rate and time elapsed is nonlinear. The heart rate increases rapidly at first with time elapsed, but then gradually plateaus. Overall, the model provides a good fit to the data and suggests that there is a nonlinear relationship between heart rate and time elapsed.
+
+# Goodness of Fit Test: Exponential Spline Regression Model
+
+Compute the AIC and BIC values for exponential spline regression model to determine the goodness of fit.
+
+```{r}
+
+expo.spline.bic <- BIC(expo.spline)
+expo.spline.bic
+expo.spline.aic <- AIC(expo.spline)
+expo.spline.aic
+
+```
+
+AIC value (46763.46) is slightly lower than the BIC value (46827.11), which suggests that the AIC is a better value. However, the difference between the two values is very small, so it is difficult to say definitively which is better. We will come back to these values later to compare all models.
+
+# Model 1.4: Polynomial Regression
+
+Polynomial regression is a type of regression analysis where the relationship between the predictor and dependent variables is modeled with an nth degree polynomial function. Unlike a linear relationship, the dependent variable does not change at a constant rate as the predictor variable changes. It may change at an increasing rate or decreasing rate or both. When plotting the data, we may see some local minima or maxima. Polynomial functions can be modeled with an equation of the form: $y=\beta_{0}+\beta_{1}x+\beta_{2}x^{2}+...+\beta_{n}x^{n}$
+Here, y is the dependent variable, x is the predictor variable, $\beta_{0}$ is the y-intercept, and $\beta_{1},...,\beta_{n}$ are coefficients. 
+
+When fitting a polynomial model to a data set, we must determine the optimal polynomial degree. See the quadratic (degree 2) model below, comparing the time_elapsed and heart_rate variables:
+
+```{r}
+
+model.quad <- lm(heart_rate ~ poly(time_elapsed, 2, raw=TRUE), data = data_small)
+summary(model.quad)
+
+```
+In the above summary, we see the estimated values for the coefficients, standard error, t statistic, and p-value for each coefficient (including the intercept).  This model has a significant overall p-value of 0.0201, but there are many other polynomial models of differing degrees to try. For example, we have a degree 6 polynomial model fitted to the data below:
+
+```{r}
+
+model.degree.6 <- lm(heart_rate ~ poly(time_elapsed, 6, raw=TRUE), data = data_small)
+summary(model.degree.6)
+
+```
+
+Take a moment to examine the p-values for the coefficients at each degree level. Once we reach degree 6, we have a p-value of 0.067218, meaning the coefficient is not significant, whereas the coefficients for degrees 1-5 are all significant. This means that a degree 5 polynomial will be a good choice for our model.
+
+Here is our degree 5 model:
+
+```{r}
+
+model.3 <- lm(heart_rate ~ poly(time_elapsed, 5, raw=TRUE), data = data_small)
+summary(model.3)
+
+```
+
+We see that our p-values for every one of the coefficients for n values 0-5 are significant at 2e-16, 4.33e-08, 2.30e-06, 8.76e-05, 0.00829, and 0.003193 respectively, which is evidence that the coefficients differ from zero, and those terms should be included in the model.  Also, the overall p-value of this model is 1.209e-09, implying that this model is a better fit than the intercept only model.
+
+# Model 1.4: Polynomial Regression Plot
+
+Here, we can examine a visual of the degree-5 polynomial fitted to our data.
+
+```{r}
+
+ggplot(data_small, aes(x=time_elapsed, y=heart_rate)) + geom_point() + geom_smooth(method = "lm", formula = y ~ poly(x, 5, raw=TRUE))
+
+```
+
+The model captures some curvature that the linear model did not.
+
+# Goodness of Fit Test: Polynomial Regression
+
+Compute the AIC and BIC values for the polynomial regression model to determine the goodness of fit.
+
+```{r}
+
+poly.bic <- BIC(model.3)
+poly.bic
+poly.aic <- AIC(model.3)
+poly.aic
+
+```
+
+AIC value (46767.17) is slightly lower than the BIC value (46813.51), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better. We will come back to these values later to compare all models.
+
+# Model 1.5: Polynomial Spline Model
+
+Next, we can try fitting a polynomial spline model to the data. Similar to an exponential spline model, a polynomial spline model is multiple smaller polynomial models created for different ranges within our data with evenly spaced 'knots' that specify the point that one range ends and the next one begins, and all these models are combined to create a piece wise function to represent the data. The goal is to more accurately represent the relationship between the variables with these range specific polynomial functions than a single polynomial function representing the entire range could. When creating a spline model, you can use the df argument in the bs function to specify the degrees of freedom. Note that the degrees of freedom is the sum of the polynomial degree and the number of knots.  Since we created a degree 5 polynomial model in the last step, we are now going to look at a degree 5 spline model.  To split the data range evenly with 5 knots, we would need to specify 10 degrees of freedom.
+
+```{r}
+
+splineModel <- lm(heart_rate ~ splines::bs(time_elapsed, df=10, degree=5), data=data_small)
+
+summary(splineModel)
+
+```
+
+Examine the above summary of the polynomial spline model. Most importantly, we have a significant p-value of 2.2e-16, implying that this model is a good fit for the data.
+
+# Model 1.5: Polynomial Spline Plot
+
+Here, we can examine a visual of the degree-5 polynomial spline model fitted to our data.
+
+```{r}
+
+ggplot(data_small, aes(x=time_elapsed, y=heart_rate)) + geom_point() + geom_smooth(method = "lm", formula = y ~ splines::bs(x, df=10, degree=5))
+
+```
+
+This gives us an image of the local minima and maxima found when computing a spline model that we do not see in an ordinary polynomial model.
+
+# Goodness of Fit Test: Polynomial Spline Regression Model
+
+Compute the AIC and BIC values for polynomial spline regression model to determine the goodness of fit.
+
+```{r}
+
+poly.spline.bic <- BIC(splineModel)
+poly.spline.bic
+poly.spline.aic <- AIC(splineModel)
+poly.spline.aic
+
+```
+
+AIC value (46684.21) is slightly lower than the BIC value (46763.65), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better. We will come back to these values later to compare all models.
+
+# Model 1.6: Michaelis-Menten Model
+
+In this model, heart_rate is still our dependent variable and time_elapsed is still our predictor variable. As seen in our original scatter plot of the data, heart_rate appears to increase quickly at first but then approaches an asymptote as time_elapsed continues to increase. This seems to mimic a model frequently used in enzyme kinetics given by the following nonlinear equation: $y = \frac{ax}{b+x}$, where $a$ is the asymptotic value of $y$ (our dependent variable, heart_rate) and $b$ is the value in which our predictor variable ($x$, time_elapsed) reaches half of the maximum response value ($a/2$).
+
+In this model, we will be using a self-starting R function called SSmicmen to provide the parameters for the model.
+
+
+```{r}
+attach(data_small)
+names(data_small)
+mm.model <- nls(heart_rate~SSmicmen(time_elapsed, a, b))
+summary(mm.model)
+
+```
+
+Both the a and b parameters have a p-value that is less than 0.05, indicating that they are both statistically significant. The residual standard error (RSE) of 16.45, represents the standard deviation of the residuals, and measures the model's lack of fit to the data. The RSE is an acceptable value given that typical heart rate ranges between 60bpm and 200bpm, suggesting that the model's predictions are closer to the actual observed values, and a better goodness of fit. The model converges after 4 iterations, with a convergence tolerance of 3.511e-06, suggesting that the model successfully found parameter estimates that minimized the sum of the squared residuals.
+
+# Model 1.6: Michaelis-Menten Plot
+
+To obtain a visual representation of Model 1.6 Michaelis-Menten model with variables heart_rate and time_elapsed, load and run the following chunk:
+
+```{r}
+time <- seq(0, 15000, .1)
+
+hrtrate <- predict(mm.model, list(time_elapsed=time))
+plot(heart_rate~time_elapsed, main="Michaelis-Menten Model", xlab="Time Elapsed (min)", ylab="Heart Rate (bpm)")
+lines(time, hrtrate, col="blue")
+
+```
+# Goodness of Fit Test: Michaelis-Menton Model
+
+Compute the AIC and BIC values for Michaelis-Menton model to determine the goodness of fit.
+
+```{r}
+
+mm.aic <- AIC(mm.model)
+mm.aic
+mm.bic <- BIC(mm.model)
+mm.bic
+
+```
+AIC value (46771.76) is slightly lower than the BIC value (46791.62), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better. We will come back to these values later to compare all models.
+
+# Model 1.7: Michaelis-Menten Spline Model
+
+Now we will fit a spline regression specifying the Michaelis-Menten formula. That merges the adaptability of spline functions with the Michaels-Menten structure. In this case we will use the default setting for the number of knots (knots=FALSE), which will result in knots being placed at each quartile for the x values.
+
+```{r}
+
+mm.spline <- with(data_small, ss(x=time_elapsed, y=( (149.0012*time_elapsed)/(0.8541+time_elapsed))))
+
+summary(mm.spline)
+
+```
+
+The residual standard error is fairly low for this model and the $R^2$ value is 0.6459, which implies that the model explains about 64.59% of variability of our data. The high F-statistic and low p-value suggest that the model could be a good fit.
+
+# Michaelis-Menten Spline Plot
+
+To obtain a visual representation of Model 1.7 Michaelis-Menten Spline model with variables heart_rate and time_elapsed, load and run the following chunk:
+
+```{r}
+
+plot(heart_rate~time_elapsed, main="Michaelis-Menten Spline Model", xlab="Time Elapsed (min)", ylab="Heart Rate (bpm)")
+lines(mm.spline, col='blue')
+
+```
+# Goodness of Fit Test: Michaelis-Menton Spline Model
+
+Compute the AIC and BIC values for Michaelis-Menton Spline model to determine the goodness of fit.
+
+```{r}
+
+mm.spline.aic <- AIC(mm.model)
+mm.spline.aic
+mm.spline.bic <- BIC(mm.model)
+mm.spline.bic
+
+```
+AIC value (46771.76) is slightly lower than the BIC value (46791.62), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better. Notice that these values are the same as the Michaelis-Menton model without the spline. We will come back to these values to compare all models.
+
+## Comparing All Models For Best Fit
+
+# Comparing AIC
+
+Run the following code chunk to review what the AIC values were for all of the models.
+
+```{r}
+
+expo.aic
+expo.spline.aic
+poly.aic
+poly.spline.aic
+mm.aic
+mm.spline.aic
+
+```
+Using AIC for model selection criteria, the polynomial spline regression model has the lowest AIC value and thus would be the model selected.
+
+# Comparing BIC
+
+Run the following code chunk to review what the BIC values were for all of the models.
+
+```{r}
+
+expo.bic
+expo.spline.bic
+poly.bic
+poly.spline.bic
+mm.bic
+mm.spline.bic
+
+```
+
+Using BIC, the polynomial spline regression model has the lowest BIC value across all models. Thus, even with a different selection criteria the polynomial spline regression model would be selected as the best model to fit our data.
+
+
+
+### Alternate 1.6/1.7 Model: NOTE TO WENDY: PLEASE READ EMAIL SENT TITLED "MODEL QUESTION" IN REGARDS TO MODEL CHOICE FOR MODELS 1.6/1.7
+
+# Model 1.6: Log Model
+
+For this model, we will use the lm function in R with the equation $y=log(x)$ to obtain our nonlinear model, where y is still heart_rate and x is still time_elapsed.
+
+```{r}
+
+log.model <- lm(heart_rate ~ log(time_elapsed), data = data_small)
+
+summary(log.model)
+
+```
+
+# Model 1.6: Log Plot 
+
+Here, we can examine a visual of the log model fitted to our data.
+
+```{r}
+ggplot(data_small, aes(x = log(time_elapsed), y = heart_rate)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = FALSE, color = "blue") +
+  labs(x = "Logarithm of Time Elapsed", y = "Heart Rate", title = "Logarithmic Model of Heart Rate vs. Time Elapsed") +
+  theme_minimal()
+
+```
+As we can see with the large clustering of the data to the right of the plot, our data is nonlinear.
+
+```{r}
+
+plot(log.model)
+
+```
+
+# Goodness of Fit Test: Log Model
+
+Compute the AIC and BIC values for log model to determine the goodness of fit.
+
+```{r}
+
+log.bic <- BIC(log.model)
+log.bic
+log.aic <- AIC(log.model)
+log.aic
+
+```
+AIC value (46809.4) is slightly lower than the BIC value (46829.26), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better.
+
+
+# Model 1.7: Log Spline
+
+Log spline regression is a form of nonlinear regression that merges the adaptability of spline functions with a log structure. 
+
+A spline regression is chosen to better demonstrate nonlinearity between the variables, heart rate and time elapsed. The family "Gaussian" is chosen under the assumption that the data is normally distributed. Run the following code chunk to obtain the statistical summary.
+
+```{r}
+
+log.spline <- gam(heart_rate ~ s(log(time_elapsed)), data = data_small)
+
+summary(log.spline)
+
+```
+The estimated degrees of freedom (edf), reference degrees of freedom, F-statistic, and p-value (<2e-16) for the smooth term. The p-value is less than 0.05, which indicates that the smooth term is statistically significant and that the relationship between heart rate and time elapsed is nonlinear. The deviance explained is 2.44%, indicating that the model captures only a small portion of the variability in the data. Overall, the model suggests that there is a nonlinear relationship between heart rate and time elapsed.
+
+# Log Spline Model Plot
+
+Here, we can examine a visual of the log spline model fitted to our data.
+
+```{r}
+
+plot(log.spline, shade = TRUE, se = TRUE)
+
+```
+
+The nonlinearity of the model is evident in the smooth term for time elapsed. The plot of the smooth term shows that the relationship between heart rate and time elapsed is nonlinear. The heart rate increases rapidly at first with time elapsed, but then gradually plateaus. Overall, the model provides a good fit to the data and suggests that there is a nonlinear relationship between heart rate and time elapsed.
+
+# Goodness of Fit Test: Log Spline Model
+
+Compute the AIC and BIC values for log model to determine the goodness of fit.
+
+```{r}
+
+log.spline.bic <- BIC(log.spline)
+log.spline.bic
+log.spline.aic <- AIC(log.spline)
+log.spline.aic
+
+```
+AIC value (46685.53) is slightly lower than the BIC value (46748.53), which suggests that the AIC is a better measure. However, the difference between the two values is very small, so it is difficult to say definitively which is better.
+
+# Comparing AIC
+
+Run the following code chunk to review what the AIC values were for all of the models.
+
+```{r}
+
+expo.aic
+expo.spline.aic
+poly.aic
+poly.spline.aic
+log.aic
+log.spline.aic
+
+```
+Using AIC for model selection criteria, the polynomial spline regression model has the lowest AIC value and thus would be the model selected.
+
+# Comparing BIC
+
+Run the following code chunk to review what the BIC values were for all of the models.
+
+```{r}
+
+expo.bic
+expo.spline.bic
+poly.bic
+poly.spline.bic
+log.bic
+log.spline.bic
+
+```
+
+Using BIC, the log spline regression model has the lowest BIC value across all models.
+
+Thus, with different selection criteria different models would be chosen the polynomial spline regression model if using AIC and the log spline regression model if using BIC.
+
+```
